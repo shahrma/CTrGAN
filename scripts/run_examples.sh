@@ -1,0 +1,4 @@
+
+
+python /home/mahpods/Dropbox/work/research/FakeMissions/code/iCTrGAN/train.py
+--name EXP5000 --dataroot ./configs/CASIA-A_DS_MPS05.yaml --checkpoints_dir /home/mahpods/WSP/research/FakeMissions/workspace/CyclePP/WS30/ --model CTrGAN --which_model_netG unet_256 --ngf 16 --dataset_mode unaligned_sequence --no_dropout --no_flip --loadSize 272 --fineSize 256 --iuv_mode iuv1 --input_nc 4 --output_nc 4 --use_perceptual_loss --pool_size 0 --niter 5 --niter_decay 15 --save_epoch_freq 20 --continue_train --epoch_count 0 --use_filters --use_sa --use_qsa --seq_len 3 --nThreads 4 --gpu 0 --train_list 0 2 4
