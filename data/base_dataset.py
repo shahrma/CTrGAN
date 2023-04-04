@@ -9,7 +9,7 @@ class BaseDataset(data.Dataset):
     def name(self):
         return 'BaseDataset'
 
-    def initialize(self, opt):
+    def initialize(self, opt,data_cfgs):
         pass
 
 def get_transform(opt):

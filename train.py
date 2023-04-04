@@ -4,26 +4,9 @@ from data.data_loader import CreateDataLoader
 from models.models import create_model
 from common.visualizer import Visualizer
 from common.fileutils import VariablesLogger
-import wandb
 
-def log_wandb_images(wandb, cvis):
-    if len(cvis) == 0:
-        return
-    for item in cvis:
-        lcvis_ = [wandb.Image(cvis[item][i], caption=i) for i in cvis[item]]
-        wandb.log({f"samples_{item}": lcvis_})
-
-
-def train_stage(opt):
-    wandb_mode = opt.wandb_mode  # "disabled" if True else "online"
-
-    run_id = opt.name.replace('/', '_')
-    run = wandb.init(project='fake_vp', entity='smahpod', id=run_id, resume='allow', mode=wandb_mode)
-    run.name = opt.name
-    run.save()
-    wbcfg = wandb.config
-    wbcfg.update(opt, allow_val_change=True)
-    data_loader = CreateDataLoader(opt)
+def train_stage(opt,data_cfgs):
+    data_loader = CreateDataLoader(opt,data_cfgs)
     dataset = data_loader.load_data()
     dataset_size = len(data_loader)
     print('#training images = %d' % dataset_size)
@@ -56,7 +39,6 @@ def train_stage(opt):
                 t = (time.time() - iter_start_time) / opt.batchSize
                 visualizer.print_current_errors(epoch, epoch_iter, errors, t)
 
-                wandb.log(errors)
                 if opt.display_id > 0:
                     visualizer.plot_current_errors(epoch, float(epoch_iter) / dataset_size, opt, errors)
 
@@ -65,11 +47,6 @@ def train_stage(opt):
                       (epoch, total_steps))
                 model.save('latest')
 
-        #errors['epoch'] = epoch
-
-
-        cvis = model.get_current_visuals_wandb()
-        # log_wandb_images(wandb, cvis)
 
         if epoch % opt.save_epoch_freq == 0:
             print('saving the model at the end of epoch %d, iters %d' %
@@ -84,29 +61,9 @@ def train_stage(opt):
 
 
 import os
-
-
-def run_series(opt, target_list, source_list):
-    epoch = opt.niter + opt.niter_decay
-    if opt.train_mode == 'train' or opt.train_mode == 'full':
-        TARGET_LIST = [f'{i:04}' for i in target_list]
-        name = opt.name
-        for target_id in TARGET_LIST:
-            opt.target_id = target_id
-            if source_list is None :
-                opt.name = os.path.join(name , f'T{opt.target_id}')
-                train_stage(opt)
-            else :
-                SOURCE_LIST = [f'{i:04}' for i in source_list]
-                for source_id in SOURCE_LIST:
-                    opt.source_id = source_id
-                    opt.name = os.path.join(name, f'T{opt.target_id}', f'{opt.source_id}' )
-                    train_stage(opt)
-
-
+from options.configs import configs_loader
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()
-    # run_series(opt,ids = [0, 2, 3])
-    train_list = [0, 1, 2, 3, 4] if opt.train_list is None else opt.train_list
-    run_series(opt, target_list=train_list, source_list = opt.source_list)
+    data_cfgs = configs_loader(opt.datafile)
+    train_stage(opt,data_cfgs)

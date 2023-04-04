@@ -11,10 +11,7 @@ class BaseOptions():
         self.initialized = False
 
     def initialize(self):
-        self.parser.add_argument('--dataroot', required=False, help='path to yaml file')
-
-        self.parser.add_argument('--datarootA', type=str, default='.',  help='path to images - A path.')
-        self.parser.add_argument('--datarootB', type=str, default='.', help='path to images - B path.')
+        self.parser.add_argument('--datafile', required=False, help='path to yaml file')
 
         self.parser.add_argument('--batchSize', type=int, default=1, help='input batch size')
         self.parser.add_argument('--loadSize', type=int, default=286, help='scale images to this size')
@@ -25,12 +22,6 @@ class BaseOptions():
         self.parser.add_argument('--npf', type=int, default=64, help='# of pred filters in first conv layer')
         self.parser.add_argument('--ndf', type=int, default=64, help='# of discrim filters in first conv layer')
         self.parser.add_argument('--which_model_netD', type=str, default='basic', help='selects model to use for netD')
-        self.parser.add_argument('--which_model_netG', type=str, default='resnet_9blocks',
-                                 help='selects model to use for netG')
-        self.parser.add_argument('--which_model_netG_M', type=str, default='',
-                                 help='netG_M for PPA architectures')
-        self.parser.add_argument('--which_model_netP', type=str, default='unet_256',
-                                 help='selects model to use for netG')
         self.parser.add_argument('--n_layers_D', type=int, default=3, help='only used if which_model_netD==n_layers')
         self.parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         self.parser.add_argument('--name', type=str, default='experiment_name',
@@ -72,7 +63,6 @@ class BaseOptions():
         self.parser.add_argument('--source_id', type=str, default='.', help='CASIA-A SOURCE ID. (for unaligned_person dataset only .can be instead of yaml)')
 
         self.parser.add_argument('--use_fullseq', action='store_true',  help='Load subsequences or Full sequence (only at unaligned_sequence_dataset)')
-        self.parser.add_argument('--use_filters', action='store_true',help='(only at unaligned_sequence_dataset)')
         self.parser.add_argument('--pretrained_cycle_model', type=str, default=None,
                                  help='pretrained_cycle_model. Options : None / CyGAN / CTrGAN')
         self.parser.add_argument('--direct_mode', type=str, default='P2A',

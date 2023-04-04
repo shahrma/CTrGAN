@@ -30,10 +30,6 @@ class CTrGANModel(BaseModel):
         self.input_A0 = self.Tensor(seq_len, opt.input_nc, size, size)
         self.input_B0 = self.Tensor(seq_len, opt.input_nc, size, size)
 
-        self.input_M0 = self.Tensor(seq_len, opt.output_nc, size, size)
-        self.input_S0 = self.Tensor(seq_len, opt.output_nc, size, size)
-
-
         # load/define networks
         # The naming conversion is different from those used in the paper
         # Code (paper): G_A (G), G_B (F), D_A (D_Y), D_B (D_X)
@@ -117,62 +113,32 @@ class CTrGANModel(BaseModel):
             for optimizer in self.optimizers:
                 self.schedulers.append(networks.get_scheduler(optimizer, opt))
 
-        self.last_debug_name = None
-
-    def debug_attention_maps(self,input):
-        encoder_map0, encoder_map1 = self.Transformer_A.get_debug()
-        if self.last_debug_name is not None:
-            import os
-            import pickle as pkl
-
-            attention_dir = './output/attentions3/'
-            os.makedirs(attention_dir,exist_ok=True)
-            oh, ow = encoder_map0.shape
-
-            with open(os.path.join(attention_dir,f'0_{self.last_debug_name}'), 'wb') as f:
-                pkl.dump(encoder_map0, f)
-
-            with open(os.path.join(attention_dir,f'1_{self.last_debug_name}'), 'wb') as f:
-                pkl.dump(encoder_map1, f)
-
-        self.last_debug_name = input['A_paths'][0][0].replace('../../datasets/CASIA/DatasetA/Crop256/rgb',
-                                                              'debug').replace('/', '_').replace('.png', '.pkl')
 
     def set_input(self, input):
         AtoB = self.opt.which_direction == 'AtoB'
         input_A0 = input['AP0'][0]
         input_B0 = input['BP0'][0]
 
-        input_S0 = input['A0'][0]
-        input_M0 = input['B0'][0]
         self.imgidx = input['imgidx']
         new_seq = True if input['imgidx'] == 1 else False
 
         self.input_A0.resize_(input_A0.size()).copy_(input_A0)
         self.input_B0.resize_(input_B0.size()).copy_(input_B0)
-        self.input_M0.resize_(input_M0.size()).copy_(input_M0)
-        self.input_S0.resize_(input_S0.size()).copy_(input_S0)
 
         if new_seq :
             self.start_new_sequence(input)
-            if self.DEBUG_MODE :
-                self.debug_attention_maps(input)
-
-        self.image_paths = input['A_paths' if AtoB else 'B_paths']
 
     def start_new_sequence(self,input):
         self.A_keys = input['A_keys'][0].to(self.input_A0.device).type(torch.cuda.FloatTensor)
         self.B_keys = input['B_keys'][0].to(self.input_B0.device).type(torch.cuda.FloatTensor)
-        self.A_obj = input['A_obj']
-        self.B_obj = input['B_obj']
+        self.A_obj = input['AP0']
+        self.B_obj = input['BP0']
         self.Transformer_A.start_new_sequence()
         self.Transformer_B.start_new_sequence()
 
     def forward(self):
         self.real_A0 = Variable(self.input_A0)
         self.real_B0 = Variable(self.input_B0)
-        self.real_M0 = Variable(self.input_M0)
-        self.real_S0 = Variable(self.input_S0)
 
     def test(self):
         real_A0 = Variable(self.input_A0)
@@ -190,18 +156,14 @@ class CTrGANModel(BaseModel):
         B_Query = self.Transformer_B(A_Keys, B_Query) if self.use_transformer else B_Query
         fake_A0 = self.netH_B(B_Query)
 
-        if not self.DEBUG_MODE :
+        A_Query = self.netF_A(fake_A0)
+        A_Query = self.Transformer_A(B_Keys,A_Query) if self.use_transformer else A_Query
+        rec_B0 = self.netH_A(A_Query)
 
-            A_Query = self.netF_A(fake_A0)
-            A_Query = self.Transformer_A(B_Keys,A_Query) if self.use_transformer else A_Query
-            rec_B0 = self.netH_A(A_Query)
+        B_Query = self.netF_B(fake_B0)
+        B_Query = self.Transformer_B(A_Keys, B_Query) if self.use_transformer else B_Query
+        rec_A0 = self.netH_B(B_Query)
 
-            B_Query = self.netF_B(fake_B0)
-            B_Query = self.Transformer_B(A_Keys, B_Query) if self.use_transformer else B_Query
-            rec_A0 = self.netH_B(B_Query)
-        else :
-            rec_A0 = fake_A0
-            rec_B0 = fake_B0
         self.rec_B0 = rec_B0.data
         self.rec_A0 = rec_A0.data
 
@@ -371,13 +333,10 @@ class CTrGANModel(BaseModel):
         fake_B0_I = util.tensor2im(self.fake_B0[0:1,2,:,:].unsqueeze(0))
         fake_A0_I = util.tensor2im(self.fake_A0[0:1,2,:,:].unsqueeze(0))
 
-        real_M0 = util.tensor2im(self.input_M0)
-        real_S0 = util.tensor2im(self.input_S0)
 
-        ret_visuals = OrderedDict([('real_A0', real_A0), ('fake_B0F', fake_B0F), ('fake_B0', fake_B0L),('real_S0', real_S0),
+        ret_visuals = OrderedDict([('real_A0', real_A0), ('fake_B0F', fake_B0F), ('fake_B0', fake_B0L),
                                    ('real_B0', real_B0), ('fake_A0F', fake_A0F), ('fake_A0', fake_A0L),
-                                   ('fake_B0_I',fake_B0_I), ('fake_A0_I',fake_A0_I),
-                                   ('real_M0', real_M0) , ('rec_B0',rec_B0),('rec_A0',rec_A0)])
+                                   ('fake_B0_I',fake_B0_I), ('fake_A0_I',fake_A0_I) , ('rec_B0',rec_B0),('rec_A0',rec_A0)])
 
         if self.opt.isTrain :
             ret_visuals['pred_fake_B'] = util.tensor2im(self.pred_fake_B)
@@ -399,10 +358,7 @@ class CTrGANModel(BaseModel):
         rec_B0 = util.tensor2iuv(self.rec_B0)
         rec_A0 = util.tensor2iuv(self.rec_A0)
 
-        real_M0 = util.tensor2im(self.input_M0)
-        real_S0 = util.tensor2im(self.input_S0)
-
-        ret_visuals = {'real' : OrderedDict([('real_A0', real_A0),('real_S0', real_S0), ('real_B0', real_B0), ('real_M0', real_M0)]),
+        ret_visuals = {'real' : OrderedDict([('real_A0', real_A0), ('real_B0', real_B0)]),
                        'fake' : OrderedDict([('fake_A0', fake_A0), ('fake_B0', fake_B0),('fake_B0_I',fake_B0_I), ('fake_A0_I',fake_A0_I)]),
                        'others' :OrderedDict([('rec_B0',rec_B0),('rec_A0',rec_A0)])}
 

@@ -1,0 +1,11 @@
+DATASET:
+  OBJ1:
+    NAME: '0000'
+    DATA_ROOT: ['./example/dataset/iuv/0000/']
+    USED_DIRS: [ [ '00','45','90' ],[ '003','004' ] ]
+    CENTROIDS_FILE: './example/configs/centroids1.yaml'
+  OBJ2:
+    NAME: '0007'
+    DATA_ROOT: ['./example/dataset/iuv/0007/']
+    USED_DIRS: [ [ '00','45','90' ],[ '003','004' ] ]
+    CENTROIDS_FILE: './example/configs/centroids2.yaml'

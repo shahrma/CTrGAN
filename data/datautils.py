@@ -30,7 +30,7 @@ def filter_filelist(fileslist, filters) :
 def filter_dirs(rootpath ,dirslist,filters) :
     out = []
     for f in dirslist :
-        sf = f.replace(rootpath, '').split('/')[1:]
+        sf = f.replace(rootpath, '').split('/')
         check = True
         for idx,_ in enumerate(filters) :
             if sf[idx] not in filters[idx] :
@@ -51,13 +51,13 @@ def _makepath(dataroot, objs, itype = None,images_only=True,filters=None) :
             paths.extend(make_dataset(currdir,images_only=images_only))
     return paths
 
-def makeseq(dataroot, objs, itype = None,images_only=True,filters=None) :
+def makeseq(dataroot, filters=None, images_only=True) :
     paths = []
     objid = []
-    for item in objs :
-        dirslist = get_dirs_list(os.path.join(dataroot,itype,item))
+    for item in dataroot :
+        dirslist = get_dirs_list(item)
         if filters is not None :
-            dirslist = filter_dirs(os.path.join(dataroot, itype, item), dirslist, filters=filters)
+            dirslist = filter_dirs(item, dirslist, filters=filters)
         for currdir in dirslist:
             paths.append(sorted(make_dataset(currdir,images_only=images_only)))
             objid.append(item)
