@@ -28,6 +28,9 @@ class UnalignedSequenceDataset(BaseDataset):
         obj1 = data_cfgs['DATASET']['OBJ1']
         obj2 = data_cfgs['DATASET']['OBJ2']
 
+        self.dataroot_obj1 = obj1['DATA_ROOT']
+        self.dataroot_obj2 = obj2['DATA_ROOT']
+
         self.AP_paths, self.A_objid = makeseq(obj1['DATA_ROOT'], filters=obj1['USED_DIRS'])
         self.BP_paths, self.B_objid = makeseq(obj2['DATA_ROOT'], filters=obj2['USED_DIRS'])
 
@@ -54,7 +57,7 @@ class UnalignedSequenceDataset(BaseDataset):
         else :
             self.currA_seq = 0
             self.currB_seq = 0
-            self.num_seq = len(self.A_paths)
+            self.num_seq = self.A_size
             self.start_fullseq()
 
 
@@ -124,7 +127,19 @@ class UnalignedSequenceDataset(BaseDataset):
 
 
         return {'AP0': AP0, 'BP0': BP0, 'imgidx' : self.subseq_idx ,
-                'A_keys' : A_keys, 'B_keys' : B_keys}
+                'A_keys' : A_keys, 'B_keys' : B_keys,
+                'currA_seq':self.currA_seq, 'A_idx': A_idx,
+                'currB_seq':self.currB_seq, 'B_idx': B_idx,
+                'AP_path': [p.replace(self.dataroot_obj1[0], '') for p in AP_path],
+                'BP_path': [p.replace(self.dataroot_obj2[0], '') for p in BP_path]}
+
+    def get_path(self,seq,idx,side='A'):
+        if side == 'A':
+            Path = self.AP_paths[seq][idx].replace(self.dataroot_obj1[0], '')
+        else :
+            Path = self.BP_paths[seq][idx].replace(self.dataroot_obj2[0], '')
+
+        return  Path
 
     def __len__(self):
         return max(self.A_size, self.B_size)

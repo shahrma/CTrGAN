@@ -14,6 +14,11 @@ from common.util import tensor2iuv
 
 def sm_test_run(opt_,outvis='fake_M0',source_id_model=None) :
     opt = copy.deepcopy(opt_)
+    data_loader = CreateDataLoader(opt,data_cfgs)
+    dataset = data_loader.load_data()
+    dataset_size = len(data_loader)
+    print('#training images = %d' % dataset_size)
+
     data_loader = CreateDataLoader(opt)
     dataset = data_loader.load_data()
     dataroot = os.path.join(dataset.dataset.get_dataroot(),'rgb',opt.source_id)

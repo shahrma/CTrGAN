@@ -11,6 +11,8 @@ class BaseDataset(data.Dataset):
 
     def initialize(self, opt,data_cfgs):
         pass
+    def get_path(self,**cfgs):
+        pass
 
 def get_transform(opt):
     transform_list = []

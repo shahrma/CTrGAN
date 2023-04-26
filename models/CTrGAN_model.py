@@ -70,6 +70,9 @@ class CTrGANModel(BaseModel):
 
         which_epoch = opt.which_epoch
 
+        self.AP_path = None
+        self.BP_path = None
+
         if not self.isTrain or opt.continue_train:
             self.load_network(self.netF_A, 'F_A', which_epoch)
             self.load_network(self.netF_B, 'F_B', which_epoch)
@@ -128,6 +131,9 @@ class CTrGANModel(BaseModel):
         if new_seq :
             self.start_new_sequence(input)
 
+        self.AP_path = input['AP_path']
+        self.BP_path = input['BP_path']
+
     def start_new_sequence(self,input):
         self.A_keys = input['A_keys'][0].to(self.input_A0.device).type(torch.cuda.FloatTensor)
         self.B_keys = input['B_keys'][0].to(self.input_B0.device).type(torch.cuda.FloatTensor)
@@ -172,11 +178,11 @@ class CTrGANModel(BaseModel):
         self.rec_B0 = fake_B0.data
         self.rec_A0 = fake_A0.data
 
-
-
-    # get image paths
-    def get_image_paths(self):
-        return self.image_paths[-1]
+    def get_image_paths(self, side = 'A'):
+        if side == 'A':
+            return self.AP_path
+        else:
+            return self.BP_path
 
     def backward_D_basic(self, netD, real, fake):
         # Real
@@ -295,7 +301,6 @@ class CTrGANModel(BaseModel):
         self.optimizer_G.zero_grad()
         self.backward_G()
         self.optimizer_G.step()
-
 
         # D_A
         self.optimizer_D_A.zero_grad()
