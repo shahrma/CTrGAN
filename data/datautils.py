@@ -54,13 +54,13 @@ def _makepath(dataroot, objs, itype = None,images_only=True,filters=None) :
 def makeseq(dataroot, filters=None, images_only=True) :
     paths = []
     objid = []
-    for item in dataroot :
-        dirslist = get_dirs_list(item)
-        if filters is not None :
-            dirslist = filter_dirs(item, dirslist, filters=filters)
-        for currdir in dirslist:
-            paths.append(sorted(make_dataset(currdir,images_only=images_only)))
-            objid.append(item)
+    item = dataroot
+    dirslist = get_dirs_list(item)
+    if filters is not None :
+        dirslist = filter_dirs(item, dirslist, filters=filters)
+    for currdir in dirslist:
+        paths.append(sorted(make_dataset(currdir,images_only=images_only)))
+        objid.append(item)
     return paths,objid
 '''
 def prepare_images(A_img, fineSize):
