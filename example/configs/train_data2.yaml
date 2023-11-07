@@ -1,0 +1,73 @@
+DATASET:
+  OBJ1:
+    -
+      NAME: '0000'
+      DATA_ROOT: './example/dataset/iuv/0000/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0001'
+      DATA_ROOT: './example/dataset/iuv/0001/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0002'
+      DATA_ROOT: './example/dataset/iuv/0002/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0003'
+      DATA_ROOT: './example/dataset/iuv/0003/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0004'
+      DATA_ROOT: './example/dataset/iuv/0004/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0005'
+      DATA_ROOT: './example/dataset/iuv/0005/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0006'
+      DATA_ROOT: './example/dataset/iuv/0006/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0007'
+      DATA_ROOT: './example/dataset/iuv/0007/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0008'
+      DATA_ROOT: './example/dataset/iuv/0008/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0009'
+      DATA_ROOT: './example/dataset/iuv/0009/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0010'
+      DATA_ROOT: './example/dataset/iuv/0010/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0011'
+      DATA_ROOT: './example/dataset/iuv/0011/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+    -
+      NAME: '0012'
+      DATA_ROOT: './example/dataset/iuv/0012/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
+  OBJ2:
+    -
+      NAME: '0000'
+      DATA_ROOT: './example/dataset/iuv/0000/'
+      USED_DIRS: [ [ '00','45','90' ],[ '001','002' ] ]
+      CENTROIDS_FILE: './example/configs/centroids.yaml'
