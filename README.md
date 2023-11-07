@@ -2,7 +2,7 @@
 This repository contains training code for the examples in the WACV 2023 paper "[CTrGAN: Cycle Transformers GAN for Gait Transfer
 ](https://www.gil-ba.com/ctrgan/CTrGAN.html)."
 
-<img src='./images/0007_T0004-W-WO.mp4' height="160px"/>
+<img src='./images/0007_T0004-W-WO.gif' height="160px"/>
 
 ## Prerequisites
 - Linux
