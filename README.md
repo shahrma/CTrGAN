@@ -5,12 +5,20 @@
 This repository contains training code for the examples in the WACV 2023 paper "[CTrGAN: Cycle Transformers GAN for Gait Transfer
 ](https://www.gil-ba.com/ctrgan/CTrGAN.html)."
 
+
+CTrGAN transfers the poses of unseen source to the target, while maintaining the natural gait of the target. 
+From left to right: (a) The source’s image is converted to 
+(b) [DensePose](https://github.com/facebookresearch/detectron2/blob/main/projects/DensePose/README.md)’s  IUV format.
+(c) The **source** pose is rendered (using [Vid2Vid](https://github.com/NVIDIA/vid2vid)) to a corresponding RGB image of the target.
+(c) Our model translates the IUV of the source to the corresponding most natural IUV pose of the target by synthesizing a novel pose. 
+(e) The **generated** pose is rendered (using [Vid2Vid](https://github.com/NVIDIA/vid2vid)) to a corresponding RGB image of the target.
+
 <img src='./images/0007_T0004-W-WO.gif' height="160px"/>
 <img src='./images/titles.jpg' height="64px"/>
 
 **Note :** The code in this repository includes the CTrGAN code that we used to convert the IUV Pose. 
-It does not include the part ( that we used to create the Source Pose from the object appearance (Detectron2-Densepose), 
-and the part that we used to convert back from Pose to Appearance (Vid2Vid)
+It does not include the part ( that we used to create the Source Pose from the object appearance ([Detectron2-Densepose](https://github.com/facebookresearch/detectron2/blob/main/projects/DensePose/README.md)), 
+and the part that we used to convert back from Pose to Appearance ([Vid2Vid](https://github.com/NVIDIA/vid2vid)))
 
 ## Prerequisites
 - Linux
