@@ -85,7 +85,10 @@ class UnalignedSequenceDataset(BaseDataset):
 
     def choose_subseq(self, paths):
         curr_seq = randint(0, len(paths) - 1)
-        curr_idx = randint(0, len(paths[curr_seq]) - 1 - self.subseq_len)
+        if self.subseq_len < len(paths[curr_seq]):
+            curr_idx = randint(0, len(paths[curr_seq]) - 1 - self.subseq_len)
+        else:
+            curr_idx = 0
         return curr_seq,curr_idx
 
     def start_fullseq(self):

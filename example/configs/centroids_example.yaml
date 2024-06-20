@@ -1,0 +1,10 @@
+'0000':
+  DATA_ROOT: './example/dataset/iuv/0000/'
+  IMAGES:
+  - 00/002/000004.png
+  - 00/002/000003.png
+'0001':
+  DATA_ROOT: './example/dataset/iuv/0001/'
+  IMAGES:
+  - 00/001/000001.png
+  - 00/001/000002.png
