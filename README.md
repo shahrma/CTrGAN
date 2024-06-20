@@ -46,4 +46,5 @@ Note: Be sure to update the variable which_epoch to the value with which you wis
 python predict.py --name EXP5010 --datafile ./example/configs/valid_example.yaml --checkpoints_dir ./example/ --model CTrGAN --ngf 16 --dataset_mode unaligned_sequence --no_dropout --no_flip --loadSize 256 --fineSize 256 --iuv_mode iuv1 --input_nc 4 --output_nc 4 --which_epoch 80 --results_dir ./example/results/ --use_fullseq --seq_len 3 --use_sa --use_qsa --gpu 0
 ```
 ## Acknowledgments
-This code is based on [pytorch-CycleGAN-and-pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) and [Recycle-GAN :Unsupervised Video Retargeting](https://github.com/aayushbansal/Recycle-GAN).
+- This code is based on [pytorch-CycleGAN-and-pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) and [Recycle-GAN :Unsupervised Video Retargeting](https://github.com/aayushbansal/Recycle-GAN).
+- Portions of the research in this paper uses the CASIA Gait Database collected by Institute of Automation, Chinese Academy of Sciences. [link](http://www.cbsr.ia.ac.cn/english/Gait%20Databases.asp)
