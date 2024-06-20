@@ -47,8 +47,8 @@ def predict_stage(opt_,data_cfgs) :
     #outroot = data_cfgs['OUTDIR']
     #outvis = data_cfgs['OUTVIS']
 
-    obj1_name = data_cfgs['DATASET']['OBJ1']['NAME']
-    obj2_name = data_cfgs['DATASET']['OBJ2']['NAME']
+    obj1_name = data_cfgs['DATASET']['OBJ1'][0]['NAME']
+    obj2_name = data_cfgs['DATASET']['OBJ2'][0]['NAME']
     outroot = os.path.join(opt.results_dir, opt.name,f'ep_{int(opt.which_epoch):05}')
 
     source_to_target(dataset, os.path.join(outroot,f'T{obj2_name}'), source_obj=1)

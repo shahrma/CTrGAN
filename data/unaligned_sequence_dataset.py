@@ -97,8 +97,11 @@ class UnalignedSequenceDataset(BaseDataset):
         self.currA_idx = 0
         self.currB_idx = 0
 
-        self.currB_keys = self.centroidsB
-        self.currA_keys = self.centroidsA
+        B_objid = self.B_objid[self.currB_seq]
+        A_objid = self.A_objid[self.currA_seq]
+
+        self.currB_keys = self.centroidsB[B_objid]
+        self.currA_keys = self.centroidsA[A_objid]
 
         self.subseq_len = len(self.AP_paths[self.currA_seq])
 
